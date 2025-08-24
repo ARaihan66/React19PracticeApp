@@ -8,7 +8,23 @@ function UseTransitionServerAction() {
     const email = formData.get("email");
     const comment = formData.get("comment");
     console.log(userName, email, comment);
-    // startTransition(() => {});
+    startTransition(async () => {
+      try {
+        const response = await fetch("http://localhost:5000/userFeedBack", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ userName, email, comment }),
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    });
   };
 
   return (
@@ -39,7 +55,7 @@ function UseTransitionServerAction() {
         />
         <br />
         <button className="bg-indigo-800 w-[300px] p-2 cursor-pointer text-white font-semibold">
-          Submit
+          {isPending ? Loading : "SUBMIT"}
         </button>
       </form>
     </div>
